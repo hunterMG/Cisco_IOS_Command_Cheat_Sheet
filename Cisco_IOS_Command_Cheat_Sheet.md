@@ -14,5 +14,27 @@ S1# show int etherchannel
 
 Spanning Tree Protocol (STP)
 
+PVST+ :
+
+S1# spanning-tree vlan 1 root primary
+S2# spanning-tree vlan 1 root secondary
+S3# spanning-tree vlan 1 priority 24576  // the vlaue of priority must be a multiply of 4096 (0~61440)
+S1(config)# int f0/1
+S1(config-if)# spanning-tree portfast
+S1(config-if)# spanning-tree bpduguard enable
+
+S1(config)# spanning-tree portfast default // enable portfast on all non trunk interfaces
+S1(config)# spanning-tree portfast bpduguard default //enable bpduguard on all interfaces which have enabled portfast
+
+RSTP :
+
+S1(config)# sapnning-tree mode rapid-pvst
+S1(config)# int f0/1
+S1(config-if)# spanning-tree link-type point-to-point
 
 
+S3# show spanning-tree
+S3# show spanning-tree vlan 10
+S3# show spanning-tree active
+S3# show spanning-tree summary
+S3# show run | include span
