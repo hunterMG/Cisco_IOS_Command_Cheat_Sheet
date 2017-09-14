@@ -108,3 +108,50 @@ R3(config-if)# crypto map VPN-MAP
 ```
 R1# show crypto ipsec sa
 ```
+## ACL
+### Numbered standard ACL
+```
+R2(config)# access-list 1 deny 192.168.11.0 0.0.0.255
+R2(config)# access-list 1 permit any
+R2(config)# interface GigabitEthernet0/0
+R2(config-if)# ip access-group 1 out
+```
+###  Named Standard ACL
+```
+R1(config)# ip access-list standard File_Server_Restrictions
+R1(config-std-nacl)# permit host 192.168.20.4
+R1(config-std-nacl)# deny any
+R2(config)# interface f 0/0
+R1(config-if)# ip access-group File_Server_Restrictions out
+```
+### ACL to VTY Lines
+```
+Router(config)# access-list 99 permit host 10.0.0.1
+Router(config)# line vty 0 4
+Router(config-line)# access-class 99 in
+```
+### Extended Numbered ACL
+```
+R1(config)# access-list 100 permit tcp 172.22.34.64 0.0.0.31 host 172.22.34.62 eq ftp
+R1(config)# access-list 100 permit icmp 172.22.34.64 0.0.0.31 host 172.22.34.62
+R1(config)# interface gigabitEthernet 0/0
+R1(config-if)# ip access-group 100 in
+```
+### Extended Named ACL
+```
+R1(config)# ip access-list extended HTTP_ONLY
+R1(config-ext-nacl)# permit tcp 172.22.34.96 0.0.0.15 host 172.22.34.62 eq www
+R1(config-ext-nacl)# permit icmp 172.22.34.96 0.0.0.15 host 172.22.34.62
+R1(config)# interface gigabitEthernet 0/1
+R1(config-if)# ip access-group HTTP_ONLY in
+```
+### ipv6 ACL
+```
+R1(config)# ipv6 access-list BLOCK_HTTP
+R1(config-ipv6-acl)# deny tcp any host 2001:DB8:1:30::30 eq www
+R1(config-ipv6-acl)# deny tcp any host 2001:DB8:1:30::30 eq 443
+R1(config-ipv6-acl)# permit ipv6 any any
+R1(config-ipv6-acl)# exit
+R1(config)# int g0/1
+R1(config-if)#ipv6 traffic-filter BLOCK_HTTP in
+```
