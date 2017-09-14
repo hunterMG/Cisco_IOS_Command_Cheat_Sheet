@@ -155,3 +155,28 @@ R1(config-ipv6-acl)# exit
 R1(config)# int g0/1
 R1(config-if)#ipv6 traffic-filter BLOCK_HTTP in
 ```
+## DHCP
+### DHCP server
+```
+ip dhcp excluded-address 192.168.10.1 192.168.10.10
+ip dhcp pool R1-LAN
+  network 192.168.10.0 255.255.255.0
+  default-router 192.168.10.1
+  dns-server 192.168.20.254
+```
+### DHCP relay
+```
+int g0/0
+  ip helper-address 10.1.1.2	//the ip address of DHCP server
+```
+### DHCP client
+```
+int g0/1
+  ip address dhcp
+```
+### show DHCP
+```
+show ip dhcp conflict
+show ip dhcp binding
+show ip dhcp pool
+```
